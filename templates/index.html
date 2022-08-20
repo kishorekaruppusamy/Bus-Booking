@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <title>Bus Booking</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href= "{{ url_for('static',filename='styles/index_style2.css') }}" />\
+    <script>
+      {% if msg == 'Bus Booked Successfully' %}
+        alert("Bus Booked Successfully");
+      {% endif %}
+    </script>
+  </head>
+  <body>
+    <div>
+      <link href= "{{ url_for('static',filename='styles/index_style1.css') }}" rel="stylesheet" />
+      <div class="home-container">
+        <div class="home-container1">
+          <h1 class="home-text">Welcome To Bus Booking<form action="{{url_for('Logout')}}"><button class="logout">Logout</button></form></h1>
+        </div>
+        <label class="home-text1">Hello {{user_name}}</label>
+        <form class="home-form" action="{{url_for('SearchBus')}}" method="post">
+          <input type="text" placeholder="From" class="home-textinput input" name="From"/>
+          <input type="text" placeholder="To" class="home-textinput1 input" name="To"/>
+          <button class="home-button button">Search Buses</button>
+        </form>
+        {% if msg == 'BusSearched'%}
+          <form class="Bus-Show" action="{{url_for('ViewSeats')}}" method="post">
+            <label class="Span-label">
+              <label CLASS="Bus-Name">RPN TRAVELS</label>
+              <label class="From-label">{{From}}</label>
+              <label class="To">To</label>
+              <label class="To-label">{{To}}</label>
+              <label class="From-time">20.50</label>
+              <label class="To-time">5.30</label>
+              <button type="submit" class="Seat-button">View Seats</button>
+            </label>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>

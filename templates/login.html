@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Login</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/login_style2.css') }}" />
+  </head>
+  <body>
+    <div>
+      <link href="{{ url_for('static',filename='styles/login_style1.css') }}" rel="stylesheet" />
+      <div class="home-container">
+        <div class="home-container1">
+            {% if msg == 'Authentication Failed, Enter Valid Credentials !!!' or msg == 'User Exist!!!!' or msg == 'User Does Not Exist'%}
+              <span class="Span">{{msg}}</span>
+            {% endif %}
+            <form class="home-form" action="{{url_for('login')}}" method="post">
+                <input type="text" placeholder="Mobile number" class="home-textinput input" name="Mobile_num" required/>
+                <input type="Password" placeholder="Password" class="home-textinput1 input" name="Pass" required/>
+                <button class="home-button button">Login</button>
+            <a href="{{url_for('Signup')}}"><button type="button" class="Signup-button">Signup</button></a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
