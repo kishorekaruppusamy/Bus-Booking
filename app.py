@@ -13,10 +13,10 @@ mydb = mysql.connector.connect(host="localhost", user="Kishore", passwd="Kishore
 # print(mydb, "connection Successful")
 Cursor = mydb.cursor()
 Cursor.execute("Use BusBooking")
-Book_Status = {}
-check = []
-User_partial = {}
-Gen_Check = {}
+Book_Status = {}  # to maintain booking status with session and database
+check = []  # to maintain the current user booked seats
+User_partial = {}  # to display the partial booked user
+Gen_Check = {}  # used to check the gender and show available seats
 
 
 # Starting route
