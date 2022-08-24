@@ -13,7 +13,7 @@ mydb = mysql.connector.connect(host="localhost", user="Kishore", passwd="Kishore
 # print(mydb, "connection Successful")
 Cursor = mydb.cursor()
 Cursor.execute("Use BusBooking")
-Book_Status = {} # to maintain booking status with session and database
+Book_Status = {}  # to maintain booking status with session and database
 check = []
 User_partial = {}
 Gen_Check = {}
@@ -75,7 +75,8 @@ def Signup():
         # print(password_hash)
         # print(upper_case, lower_case, Special, Digits)
         if not upper_case or not lower_case or not Special or not Digits or not (8 <= len(Password) <= 12):
-            return render_template('Signup.html', msg='Password Must Contain 8 to 12 Characters, one Upper, one Lower, one Special character and one Digit')
+            return render_template('Signup.html',
+                                   msg='Password Must Contain 8 to 12 Characters, one Upper, one Lower, one Special character and one Digit')
         if Password != C_password:
             return render_template('Signup.html', msg='Entered Password and Confirm-password are not Same')
         if Gender == '0':
