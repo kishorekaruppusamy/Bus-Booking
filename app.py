@@ -13,7 +13,7 @@ mydb = mysql.connector.connect(host="localhost", user="Kishore", passwd="Kishore
 # print(mydb, "connection Successful")
 Cursor = mydb.cursor()
 Cursor.execute("Use BusBooking")
-Book_Status = {}
+Book_Status = {} # to maintain booking status with session and database
 check = []
 User_partial = {}
 Gen_Check = {}
