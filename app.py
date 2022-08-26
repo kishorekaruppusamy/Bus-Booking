@@ -43,7 +43,7 @@ def login():
                 session['Mobile_num'] = Mobile_Num
                 session['Gender'] = result[0][1]
                 session['user'] = result[0][2]
-                # print(session, "Session printed")
+                print(session, "Session printed")
                 return redirect(url_for('Dashboard'))
             else:
                 return render_template('login.html', msg='Authentication Failed, Enter Valid Credentials !!!')
