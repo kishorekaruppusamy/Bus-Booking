@@ -2,15 +2,11 @@ import string
 import mysql.connector.errorcode
 from flask import *
 import mysql.connector
-from flask_bcrypt import Bcrypt
-
-bcrypt = Bcrypt()
 
 app = Flask(__name__)
 app.secret_key = 'login'
 mydb = mysql.connector.connect(host="localhost", user="Kishore", passwd="Kishore@123",
                                auth_plugin='mysql_native_password', database="BusBooking")
-# print(mydb, "connection Successful")
 Cursor = mydb.cursor()
 Cursor.execute("Use BusBooking")
 Book_Status = {}  # to maintain booking status with session and database
@@ -22,7 +18,6 @@ Gen_Check = {}  # used to check the gender and show available seats
 # Starting route
 @app.route('/')
 def home():
-    # print('Signup page rendered')
     return redirect(url_for('Dashboard'))
 
 
@@ -31,13 +26,11 @@ def login():
     if 'Mobile_num' in session:
         return redirect(url_for('Dashboard'))
     if request.method == 'POST':
-        # print("inside login post")
         Mobile_Num = request.form['Mobile_num']
         Password = request.form['Pass']
         get_data = f"SELECT Password,Gender,Name FROM User WHERE MobileNum = {Mobile_Num}"
         Cursor.execute(get_data)
         result = Cursor.fetchall()
-        # print(result)
         if len(result):
             if result[0][0] == Password:
                 session['Mobile_num'] = Mobile_Num
@@ -59,7 +52,6 @@ def Signup():
     if 'Mobile_num' in session:
         return redirect(url_for('Dashboard'))
     if request.method == 'POST':
-        # print('signup route')
         user_name = request.form['user_Name']
         User_Age = int(request.form['User_Age'])
         Gender = request.form['Gender']
@@ -71,9 +63,6 @@ def Signup():
         lower_case = any([1 if c in string.ascii_lowercase else 0 for c in Password])
         Special = any([1 if c in string.punctuation else 0 for c in Password])
         Digits = any([1 if c in string.digits else 0 for c in Password])
-        # password_hash = bcrypt.generate_password_hash(Password)
-        # print(password_hash)
-        # print(upper_case, lower_case, Special, Digits)
         if not upper_case or not lower_case or not Special or not Digits or not (8 <= len(Password) <= 12):
             return render_template('Signup.html',
                                    msg='Password Must Contain 8 to 12 Characters, one Upper, one Lower, one Special character and one Digit')
@@ -120,8 +109,6 @@ def ViewSeats():
             'UPDATE BookStatus SET PassengerName  = DEFAULT(PassengerName), PassengerAge = DEFAULT(PassengerAge), PassengerGender = DEFAULT(PassengerGender), BookingStatus = DEFAULT(BookingStatus), TimeStamp = DEFAULT(TimeStamp) WHERE TimeStamp < (NOW() - INTERVAL 2 MINUTE) AND BookingStatus = "Partial"')
         mydb.commit()
         Data()
-        # for i in Gen_Check:
-        #     print(i, '-->', Gen_Check[i])
         check.clear()
         return render_template('Booking.html', Book_Status=Book_Status, length=len(check), Gen_Check=Gen_Check,
                                Gender=session["Gender"])
@@ -140,7 +127,6 @@ def Button():
                                    Gender=session["Gender"])
         if Book_Status[Btn] == 'unBooked':
             if len(check) > 5:
-                # print(check)
                 return render_template('Booking.html', Book_Status=Book_Status,
                                        msg='The maximum number of seats that can be selected is 6', length=len(check),
                                        Gen_Check=Gen_Check, Gender=session["Gender"])
@@ -180,21 +166,15 @@ def Confirm():
         length = len(check)
         for i in range(1, length + 1):
             Book_Status[check[i - 1]] = 'Booked'
-            # print(check[i - 1], '-->', Book_Status[check[i - 1]])
             data = (request.form['N' + str(i)], int(request.form['A' + str(i)]), request.form['G' + str(i)],
                     request.form['G' + str(i)], check[i - 1])
-            # print(data)
             add_Data = '''UPDATE BookStatus SET PassengerName = '%s', PassengerAge = %d, PassengerGender = '%s', BookingStatus = 'Booked', Gen = '%s' WHERE SeatNo = '%s';''' % data
             Cursor.execute(add_Data)
             mydb.commit()
-            # print("Query Executed")
         for i in check:
-            # print(i)
             get_data = "SELECT * FROM BookStatus WHERE SeatNo = '%s'" % i
             Cursor.execute(get_data)
             Result = Cursor.fetchall()
-            # print(Result)
-            # print(Result[0][6], type(Result[0][6]))
             if Result[0][7] == 'Female':
                 if (1 <= Result[0][6] <= 6) or (19 <= Result[0][6] <= 24):
                     val = Result[0][6] + 6
@@ -207,8 +187,6 @@ def Confirm():
                     Cursor.execute(add_Data)
                     mydb.commit()
         user = session['user']
-        # for key in Gen_Check:
-        #     print(key, '-->', Gen_Check[key])
         return render_template('index.html', msg="Bus Booked Successfully", user_name=user)
     else:
         return redirect(url_for('login'))
@@ -248,5 +226,4 @@ def Data():
 
 if __name__ == '__main__':
     Data()
-    # print('flask started')
     app.run(debug=True, port=8000)
