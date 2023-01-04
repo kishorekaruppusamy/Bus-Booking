@@ -18,9 +18,8 @@
         <div class="home-container1">
           <div class="home-container2">
             <form class="home-form" action="{{url_for('Confirm')}}" method="post">
-
               {% if length >= 1 %}
-                <h1 class="home-text">Seat No : {{check[0]}}</h1>
+                <h1 class="home-text">Seat No : {{check[0]}} {% if Gen_Check[reserved[0]] == 'Reserved' %} {{"Reserved For Female Passenger"}} {% endif %}</h1>
                 <input
                   type="text"
                   placeholder="First PassengerName"
@@ -35,11 +34,18 @@
                   name="A1"
                   required
                 />
-                <select class="home-select" name="G1">
-                  <option value="Option 1">Select</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
+                {% if Gen_Check[reserved[0]] == 'Reserved' %}
+                  <select class="home-select" name="G1">
+                    <option value="Option 1">Select</option>
+                    <option value="Female">Female</option>
+                  </select>
+                {% else %}
+                  <select class="home-select" name="G1">
+                    <option value="Option 1">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                {% endif %}
               {% endif %}
 
 
@@ -59,12 +65,19 @@
                   name="A2"
                   required
                 />
-                <select class="home-select1" name="G2">
-                  <option>Select</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
+                {% if Gen_Check[reserved[1]] == 'Reserved' %}
+                  <select class="home-select" name="G1">
+                    <option value="Option 1">Select</option>
+                    <option value="Female">Female</option>
+                  </select>
+                {% else %}
+                  <select class="home-select" name="G1">
+                    <option value="Option 1">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
                 {% endif %}
+              {% endif %}
 
 
               {% if length >= 3 %}
@@ -83,11 +96,18 @@
                   name="A3"
                   required
                 />
-                <select class="home-select2" name="G3">
-                  <option selected>Select</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
+                {% if Gen_Check[reserved[2]] == 'Reserved' %}
+                  <select class="home-select" name="G1">
+                    <option value="Option 1">Select</option>
+                    <option value="Female">Female</option>
+                  </select>
+                {% else %}
+                  <select class="home-select" name="G1">
+                    <option value="Option 1">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                {% endif %}
               {% endif %}
 
 
@@ -107,11 +127,18 @@
                   name="A4"
                   required
                 />
-                <select class="home-select3" name="G4">
-                  <option>Select</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
+                {% if Gen_Check[reserved[3]] == 'Reserved' %}
+                  <select class="home-select" name="G1">
+                    <option value="Option 1">Select</option>
+                    <option value="Female">Female</option>
+                  </select>
+                {% else %}
+                  <select class="home-select" name="G1">
+                    <option value="Option 1">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                {% endif %}
               {% endif %}
 
 
@@ -131,11 +158,18 @@
                   name="A5"
                   required
                 />
-                <select class="home-select4" name="G5">
-                  <option>Select</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
+                {% if Gen_Check[reserved[4]] == 'Reserved' %}
+                  <select class="home-select" name="G1">
+                    <option value="Option 1">Select</option>
+                    <option value="Female">Female</option>
+                  </select>
+                {% else %}
+                  <select class="home-select" name="G1">
+                    <option value="Option 1">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                {% endif %}
               {% endif %}
 
               {% if length == 6 %}
@@ -154,11 +188,18 @@
                   name="A6"
                   required
                 />
-                <select class="home-select5" name="G6 ">
-                  <option>Select</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
+                {% if Gen_Check[reserved[5]] == 'Reserved' %}
+                  <select class="home-select" name="G1">
+                    <option value="Option 1">Select</option>
+                    <option value="Female">Female</option>
+                  </select>
+                {% else %}
+                  <select class="home-select" name="G1">
+                    <option value="Option 1">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                {% endif %}
               {% endif %}
               <button class="home-button button">Confirm Booking</button>
             </form>

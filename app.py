@@ -2,6 +2,7 @@ import string
 import mysql.connector.errorcode
 from flask import *
 import mysql.connector
+import logging
 
 app = Flask(__name__)
 app.secret_key = 'login'
@@ -13,11 +14,15 @@ Book_Status = {}  # to maintain booking status with session and database
 check = []  # to maintain the current user booked seats
 User_partial = {}  # to display the partial booked user
 Gen_Check = {}  # used to check the gender and show available seats
+reserved = []
 
 
 # Starting route
 @app.route('/')
 def home():
+    logging.basicConfig(filename="/home/local/ZOHOCORP/kishore-pt5635/PycharmProjects/Bus_Ticket_booking/Logger.log",
+                        format='%(asctime)s %(message)s', filemode='a', level=logging.DEBUG,
+                        datefmt='%m/%d/%Y %I:%M:%S %p')
     return redirect(url_for('Dashboard'))
 
 
@@ -110,6 +115,7 @@ def ViewSeats():
         mydb.commit()
         Data()
         check.clear()
+        reserved.clear()
         return render_template('Booking.html', Book_Status=Book_Status, length=len(check), Gen_Check=Gen_Check,
                                Gender=session["Gender"])
     else:
@@ -120,7 +126,7 @@ def ViewSeats():
 def Button():
     if request.method == 'POST' and 'Mobile_num' in session:
         Btn = int(request.form['btn'])
-        Cursor.execute(f"SELECT SeatNo FROM BookStatus WHERE No = {Btn}")
+        Cursor.execute(f"SELECT SeatNo, No FROM BookStatus WHERE No = {Btn}")
         Result = Cursor.fetchall()
         if User_partial[Btn] == 'Partial':
             return render_template('Booking.html', Book_Status=Book_Status, length=len(check), Gen_Check=Gen_Check,
@@ -131,10 +137,13 @@ def Button():
                                        msg='The maximum number of seats that can be selected is 6', length=len(check),
                                        Gen_Check=Gen_Check, Gender=session["Gender"])
             check.append(Result[0][0])
+            reserved.append(Result[0][1])
             Book_Status[Btn] = 'Partial'
         elif Book_Status[Btn] == 'Partial':
             check.remove(Result[0][0])
+            reserved.append(Result[0][1])
             Book_Status[Btn] = 'unBooked'
+        print(reserved)
         return render_template('Booking.html', Book_Status=Book_Status, length=len(check), Gen_Check=Gen_Check,
                                Gender=session["Gender"])
     else:
@@ -155,7 +164,7 @@ def Block():
             add_Data = ''' UPDATE BookStatus SET PassengerName = '%s', PassengerAge = %d, PassengerGender = '%s', BookingStatus = 'Partial', TimeStamp = now() WHERE SeatNo = '%s';''' % data
             Cursor.execute(add_Data)
             mydb.commit()
-        return render_template('PassengerDetails.html', check=check, length=len(check))
+        return render_template('PassengerDetails.html', check=check, length=len(check), Gen_Check=Gen_Check, reserved=reserved)
     else:
         return redirect(url_for('login'))
 
