@@ -201,7 +201,7 @@ def Confirm():
         return redirect(url_for('login'))
 
 
-@app.route('/Dashboard')
+@app.route('/Dashboard', methods=['post', 'get'])
 def Dashboard():
     if 'Mobile_num' in session:
         user = session['user']
